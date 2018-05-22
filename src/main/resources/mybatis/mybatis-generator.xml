@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+
+    <context id="context1">
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin" />
+        <commentGenerator>
+            <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+            <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+            <property name="suppressDate" value="true" />
+            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+            <property name="suppressAllComments" value="true" />
+        </commentGenerator>
+        <!-- jdbc四大件 -->
+        <jdbcConnection connectionURL="jdbc:mysql://localhost:3306/test?useSSL=false"
+                        driverClass="com.mysql.jdbc.Driver"
+                        password="123456"
+                        userId="root" />
+        <javaTypeResolver>
+            <!-- This property is used to specify whether MyBatis Generator should
+                force the use of java.math.BigDecimal for DECIMAL and NUMERIC fields, -->
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+        <!-- 生成的pojo包名和路径 -->
+        <javaModelGenerator targetPackage="com.fly.blog.entity"
+                            targetProject="src\main\java" >
+
+        </javaModelGenerator>
+        <!-- 映射文件 -->
+        <sqlMapGenerator targetPackage="com.fly.blog.dao"
+                         targetProject="src\main\resources"/>
+        <!-- dao -->
+        <javaClientGenerator targetPackage="com.fly.blog.dao"
+                             targetProject="src\main\java"
+                             type="XMLMAPPER"/>
+        <!-- 哪些表 -->
+        <!--<table schema="" tableName="items" domainObjectName="Item" mapperName="ItemDao">-->
+        <!--</table>-->
+        <table schema="test" tableName="user" domainObjectName="User" mapperName="UserDao"/>
+        <table schema="test" tableName="news" domainObjectName="News" mapperName="NewsDao"/>
+
+    </context>
+</generatorConfiguration>

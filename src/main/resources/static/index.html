@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>开始使用layui</title>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <script src="layui/layui.js"></script>
+</head>
+<body>
+<header>
+    <ul class="layui-nav layui-bg-black" lay-filter="">
+        <li class="layui-nav-item layui-this"><a href="">首页</a></li>
+        <li class="layui-nav-item"><a href="">新闻头条</a></li>
+        <li class="layui-nav-item"><a href="">网易新闻</a></li>
+        <li class="layui-nav-item"><a href="">搜狐新闻</a></li>
+        <li class="layui-nav-item"><a href="">凤凰新闻</a></li>
+        <li class="layui-nav-item"><a href="">新浪微博</a></li>
+        <li class="layui-nav-item">
+            <a href="javascript:;">其他</a>
+            <dl class="layui-nav-child"> <!-- 二级菜单 -->
+                <dd><a href="">菜单1</a></dd>
+                <dd><a href="">菜单2</a></dd>
+                <dd><a href="">菜单3</a></dd>
+            </dl>
+        </li>
+    </ul>
+</header>
+<div class="layui-container">
+    <hr>
+    <div>
+        <span class="layui-breadcrumb">
+            <a href="">首页</a>
+            <a href="">国际新闻</a>
+            <a href="">亚太地区</a>
+            <a><cite>正文</cite></a>
+        </span>
+    </div>
+    <hr>
+    <div class="layui-carousel" id="carousel1">
+        <div carousel-item>
+            <div align="center"><img src="img/1.jpg" height="100%"></div>
+            <div align="center"><img src="img/2.jpg" height="100%"></div>
+            <div align="center"><img src="img/3.jpg" height="100%"></div>
+            <div align="center"><img src="img/4.jpg" height="100%"></div>
+            <div align="center"><img src="img/5.jpg" height="100%"></div>
+        </div>
+    </div>
+    <hr>
+    <div class="layui-row" id="contentArea">
+        <div class="layui-col-md6 layui-col-lg4 layui-col-sm12" style="padding: 5px">
+            <img src="img/6.jpg" height="200">
+        </div>
+        <div class="layui-col-md6 layui-col-lg4 layui-col-sm12" style="padding: 5px">
+            <img src="img/6.jpg" height="200">
+        </div>
+        <div class="layui-col-md6 layui-col-lg4 layui-col-sm12" style="padding: 5px">
+            <img src="img/6.jpg" height="200">
+        </div>
+        <div class="layui-col-md6 layui-col-lg4 layui-col-sm12" style="padding: 5px">
+            <img src="img/6.jpg" height="200">
+        </div>
+        <div class="layui-col-md6 layui-col-lg4 layui-col-sm12" style="padding: 5px">
+            <img src="img/6.jpg" height="200">
+        </div>
+        <div class="layui-col-md6 layui-col-lg4 layui-col-sm12" style="padding: 5px">
+            <img src="img/6.jpg" height="200">
+        </div>
+
+    </div>
+    <div id="pageArea"></div>
+
+</div>
+
+<script>
+    //注意：导航 依赖 element 模块，否则无法进行功能性操作
+    layui.use(['element','carousel','laypage'], function(){
+        const element = layui.element;
+        const carousel = layui.carousel;
+        const laypage = layui.laypage;
+        carousel.render({
+            elem: '#carousel1',
+            width: '100%', //设置容器宽度,
+            height: '400px',
+            arrow: 'always' //始终显示箭头
+            //,anim: 'updown' //切换动画方式
+        });
+        //执行一个laypage实例
+        laypage.render({
+            elem: 'pageArea', //注意，这里的 test1 是 ID，不用加 # 号
+            count: 50, //数据总数，从服务端得到
+            jump: function(obj, first){
+                //obj包含了当前分页的所有参数，比如：
+//                console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+//                console.log(obj.limit); //得到每页显示的条数
+//                alert(obj.curr + " " + obj.limit)
+                //首次不执行
+                if(!first){
+                    //do something
+                }
+            }
+        });
+
+    });
+</script>
+
+</body>
+</html>
