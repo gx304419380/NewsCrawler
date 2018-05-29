@@ -28,7 +28,7 @@ public class NetEasyNewsPuller implements NewsPuller {
             Document html = getHtmlFromUrl(url, false);
             Elements titles = html.getElementsByTag("h3");
             titles.forEach(System.out::println);
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.error("==============get html error : {}=============", url);
             e.printStackTrace();
         }

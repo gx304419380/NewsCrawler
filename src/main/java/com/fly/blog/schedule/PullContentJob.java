@@ -23,7 +23,7 @@ public class PullContentJob {
 
 //    @Scheduled(fixedRate = 3600000)
     public void pullContent() {
-        newsPullers.forEach(NewsPuller::pullNews);
+        newsPullers.parallelStream().forEach(NewsPuller::pullNews);
     }
 
 }

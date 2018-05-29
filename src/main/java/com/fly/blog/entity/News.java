@@ -15,6 +15,8 @@ public class News {
 
     private Date newsDate;
 
+    private String source;
+
     private String content;
 
     public Integer getId() {
@@ -65,6 +67,14 @@ public class News {
         this.newsDate = newsDate;
     }
 
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
     public String getContent() {
         return content;
     }
@@ -85,6 +95,7 @@ public class News {
         sb.append(", image=").append(image);
         sb.append(", createDate=").append(createDate);
         sb.append(", newsDate=").append(newsDate);
+        sb.append(", source=").append(source);
         sb.append(", content=").append(content);
         sb.append("]");
         return sb.toString();

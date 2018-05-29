@@ -17,7 +17,7 @@ public interface NewsPuller {
 
     void pullNews();
 
-    default Document getHtmlFromUrl(String url, boolean useHtmlUnit) throws IOException {
+    default Document getHtmlFromUrl(String url, boolean useHtmlUnit) throws Exception {
         if (!useHtmlUnit) {
             return Jsoup.connect(url)
                     //模拟火狐浏览器
@@ -25,16 +25,17 @@ public interface NewsPuller {
                     .get();
         } else {
             WebClient webClient = new WebClient(BrowserVersion.CHROME);
-//            webClient.getOptions().setJavaScriptEnabled(true);
-//            webClient.getOptions().setCssEnabled(false);
-//            webClient.getOptions().setActiveXNative(false);
-//            webClient.getOptions().setCssEnabled(false);
-//            webClient.getOptions().setThrowExceptionOnScriptError(false);
-//            webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
-//            webClient.getOptions().setTimeout(5000);
+            webClient.getOptions().setJavaScriptEnabled(true);
+            webClient.getOptions().setCssEnabled(false);
+            webClient.getOptions().setActiveXNative(false);
+            webClient.getOptions().setCssEnabled(false);
+            webClient.getOptions().setThrowExceptionOnScriptError(false);
+            webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+            webClient.getOptions().setTimeout(10000);
             HtmlPage rootPage = webClient.getPage(url);
-            webClient.waitForBackgroundJavaScript(8000);
+            webClient.waitForBackgroundJavaScript(10000);
             String htmlString = rootPage.asXml();
+            webClient.close();
             return Jsoup.parse(htmlString);
         }
     }

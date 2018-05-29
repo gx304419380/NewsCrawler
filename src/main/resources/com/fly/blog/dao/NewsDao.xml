@@ -8,6 +8,7 @@
     <result column="image" jdbcType="VARCHAR" property="image" />
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
     <result column="news_date" jdbcType="TIMESTAMP" property="newsDate" />
+    <result column="source" jdbcType="VARCHAR" property="source" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.fly.blog.entity.News">
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
@@ -71,7 +72,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, title, url, image, create_date, news_date
+    id, title, url, image, create_date, news_date, source
   </sql>
   <sql id="Blob_Column_List">
     content
@@ -127,10 +128,10 @@
   <insert id="insert" parameterType="com.fly.blog.entity.News">
     insert into news (id, title, url, 
       image, create_date, news_date, 
-      content)
+      source, content)
     values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
       #{image,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{newsDate,jdbcType=TIMESTAMP}, 
-      #{content,jdbcType=LONGVARCHAR})
+      #{source,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.fly.blog.entity.News">
     insert into news
@@ -152,6 +153,9 @@
       </if>
       <if test="newsDate != null">
         news_date,
+      </if>
+      <if test="source != null">
+        source,
       </if>
       <if test="content != null">
         content,
@@ -175,6 +179,9 @@
       </if>
       <if test="newsDate != null">
         #{newsDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="source != null">
+        #{source,jdbcType=VARCHAR},
       </if>
       <if test="content != null">
         #{content,jdbcType=LONGVARCHAR},
@@ -208,6 +215,9 @@
       <if test="record.newsDate != null">
         news_date = #{record.newsDate,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.source != null">
+        source = #{record.source,jdbcType=VARCHAR},
+      </if>
       <if test="record.content != null">
         content = #{record.content,jdbcType=LONGVARCHAR},
       </if>
@@ -224,6 +234,7 @@
       image = #{record.image,jdbcType=VARCHAR},
       create_date = #{record.createDate,jdbcType=TIMESTAMP},
       news_date = #{record.newsDate,jdbcType=TIMESTAMP},
+      source = #{record.source,jdbcType=VARCHAR},
       content = #{record.content,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -236,7 +247,8 @@
       url = #{record.url,jdbcType=VARCHAR},
       image = #{record.image,jdbcType=VARCHAR},
       create_date = #{record.createDate,jdbcType=TIMESTAMP},
-      news_date = #{record.newsDate,jdbcType=TIMESTAMP}
+      news_date = #{record.newsDate,jdbcType=TIMESTAMP},
+      source = #{record.source,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -259,6 +271,9 @@
       <if test="newsDate != null">
         news_date = #{newsDate,jdbcType=TIMESTAMP},
       </if>
+      <if test="source != null">
+        source = #{source,jdbcType=VARCHAR},
+      </if>
       <if test="content != null">
         content = #{content,jdbcType=LONGVARCHAR},
       </if>
@@ -272,6 +287,7 @@
       image = #{image,jdbcType=VARCHAR},
       create_date = #{createDate,jdbcType=TIMESTAMP},
       news_date = #{newsDate,jdbcType=TIMESTAMP},
+      source = #{source,jdbcType=VARCHAR},
       content = #{content,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -281,7 +297,8 @@
       url = #{url,jdbcType=VARCHAR},
       image = #{image,jdbcType=VARCHAR},
       create_date = #{createDate,jdbcType=TIMESTAMP},
-      news_date = #{newsDate,jdbcType=TIMESTAMP}
+      news_date = #{newsDate,jdbcType=TIMESTAMP},
+      source = #{source,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
