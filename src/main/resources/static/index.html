@@ -38,37 +38,11 @@
     </div>
     <hr>
     <div class="layui-carousel" id="carousel1">
-        <div carousel-item>
-            <div align="center"><img src="img/1.jpg" height="100%"></div>
-            <div align="center"><img src="img/2.jpg" height="100%"></div>
-            <div align="center"><img src="img/3.jpg" height="100%"></div>
-            <div align="center"><img src="img/4.jpg" height="100%"></div>
-            <div align="center"><img src="img/5.jpg" height="100%"></div>
-        </div>
+        <div id="carousel2" carousel-item></div>
     </div>
     <hr>
-    <div class="layui-row" id="contentArea">
-        <div class="layui-col-md6 layui-col-lg4 layui-col-sm12" style="padding: 5px">
-            <img src="img/6.jpg" height="200">
-        </div>
-        <div class="layui-col-md6 layui-col-lg4 layui-col-sm12" style="padding: 5px">
-            <img src="img/6.jpg" height="200">
-        </div>
-        <div class="layui-col-md6 layui-col-lg4 layui-col-sm12" style="padding: 5px">
-            <img src="img/6.jpg" height="200">
-        </div>
-        <div class="layui-col-md6 layui-col-lg4 layui-col-sm12" style="padding: 5px">
-            <img src="img/6.jpg" height="200">
-        </div>
-        <div class="layui-col-md6 layui-col-lg4 layui-col-sm12" style="padding: 5px">
-            <img src="img/6.jpg" height="200">
-        </div>
-        <div class="layui-col-md6 layui-col-lg4 layui-col-sm12" style="padding: 5px">
-            <img src="img/6.jpg" height="200">
-        </div>
-
-    </div>
-    <div id="pageArea"></div>
+    <div class="layui-row" id="contentArea"></div>
+    <div align="center" id="pageArea"></div>
 
 </div>
 
@@ -78,7 +52,9 @@
         const element = layui.element;
         const carousel = layui.carousel;
         const laypage = layui.laypage;
-        carousel.render({
+        $ = layui.$;
+
+        const car = carousel.render({
             elem: '#carousel1',
             width: '100%', //设置容器宽度,
             height: '400px',
@@ -101,6 +77,26 @@
             }
         });
 
+        $.get("/news/toutiao", {page : 1, pageSize : 10}, function (data) {
+            $.each(data, function (i, news) {
+                $("#contentArea").append(
+                    "<hr>" +
+                    "<div class=\"layui-row\" style=\"padding: 5px\">\n" +
+                    "<div style='padding-right: 20px' class=\"layui-col-md4 layui-col-lg4 layui-col-sm4\">\n" +
+                    "<a href='"+news.url+"'><img src=\"" + news.image + "\" height='200px' width='100%'></a>\n" +
+                    "</div>\n" +
+                    "<div class=\"layui-col-md8 layui-col-lg8 layui-col-sm8\">\n" +
+                    "<a href='" + news.url + "'><h2>" + news.title + "</h2></a>" +
+                    "</div>\n" +
+                    "</div>"
+                );
+
+                $("#carousel2").append(
+                    "<div align=\"center\"><img src='" + news.image + "' height=\"100%\"></div>"
+                );
+            });
+            car.reload();
+        }, "json");
     });
 </script>
 

@@ -75,15 +75,14 @@ public class ToutiaoNewsPuller implements NewsPuller {
 
         logger.info("今日头条新闻标题拉取完成!");
         logger.info("开始拉取新闻内容...");
-        for (News news : newsMap.values()) {
+        newsMap.values().parallelStream().forEach(news -> {
             logger.info("===================={}====================", news.getTitle());
             Document contentHtml = null;
             try {
                 contentHtml = getHtmlFromUrl(news.getUrl(), true);
             } catch (Exception e) {
                 logger.error("获取新闻《{}》内容失败！", news.getTitle());
-                e.printStackTrace();
-                continue;
+                return;
             }
             Elements scripts = contentHtml.getElementsByTag("script");
             scripts.forEach(script -> {
@@ -95,8 +94,7 @@ public class ToutiaoNewsPuller implements NewsPuller {
                     news.setContent(matcher.group(1));
                 }
             });
-
-        }
+        });
         logger.info("新闻内容拉取完成!");
         newsMap.values()
                 .stream()
