@@ -15,4 +15,5 @@ public interface NewsService {
 
     List<News> searchNewsForPage(int page, int pageSize, NewsExample example);
 
+    Long countByExample(NewsExample example);
 }

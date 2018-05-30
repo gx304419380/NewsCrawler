@@ -64,12 +64,14 @@
         //执行一个laypage实例
         laypage.render({
             elem: 'pageArea', //注意，这里的 test1 是 ID，不用加 # 号
-            count: 50, //数据总数，从服务端得到
+            count: getContentCount(), //数据总数，从服务端得到
+            curr: 1,
+            limit: 5,
             jump: function(obj, first){
                 //obj包含了当前分页的所有参数，比如：
 //                console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
 //                console.log(obj.limit); //得到每页显示的条数
-//                alert(obj.curr + " " + obj.limit)
+                getContent(obj.curr, obj.limit)
                 //首次不执行
                 if(!first){
                     //do something
@@ -77,26 +79,54 @@
             }
         });
 
-        $.get("/news/toutiao", {page : 1, pageSize : 10}, function (data) {
+        $.get("/news/toutiao", {page : 1, pageSize : 5}, function (data) {
             $.each(data, function (i, news) {
-                $("#contentArea").append(
-                    "<hr>" +
-                    "<div class=\"layui-row\" style=\"padding: 5px\">\n" +
-                    "<div style='padding-right: 20px' class=\"layui-col-md4 layui-col-lg4 layui-col-sm4\">\n" +
-                    "<a href='"+news.url+"'><img src=\"" + news.image + "\" height='200px' width='100%'></a>\n" +
-                    "</div>\n" +
-                    "<div class=\"layui-col-md8 layui-col-lg8 layui-col-sm8\">\n" +
-                    "<a href='" + news.url + "'><h2>" + news.title + "</h2></a>" +
-                    "</div>\n" +
-                    "</div>"
-                );
-
                 $("#carousel2").append(
                     "<div align=\"center\"><img src='" + news.image + "' height=\"100%\"></div>"
                 );
             });
             car.reload();
         }, "json");
+
+        function getContent(page, pageSize) {
+            $.get("/news/toutiao", {'page' : page, 'pageSize' : pageSize}, function (data) {
+                $("#contentArea").empty();
+                $.each(data, function (i, news) {
+                    $("#contentArea").append(
+                        "<hr>" +
+                        "<div class=\"layui-row\" style=\"padding: 5px\">\n" +
+                        "<div style='padding-right: 20px' class=\"layui-col-md4 layui-col-lg4 layui-col-sm4\">\n" +
+                        "<a href='" + news.url + "'><img src=\"" + news.image + "\" height='200px' width='100%'></a>\n" +
+                        "</div>\n" +
+                        "<div class=\"layui-col-md8 layui-col-lg8 layui-col-sm8\">\n" +
+                        "<a href='" + news.url + "'><h2><b>" + news.title + "</b></h2></a>" +
+                        "<fieldset class=\"layui-elem-field layui-field-title site-title\">\n" +
+                        "<legend style='font-size: 14px' align='right'>" + news.createDate.substring(0, 10) + "</legend>\n" +
+                        "</fieldset>" +
+                        "<p style = 'font-size: 18px; line-height:2'>" + removeHTMLTag(news.content).substring(0, 140) + "...</p>" +
+                        "</div>\n" +
+                        "</div>"
+                    );
+                })
+            });
+        }
+
+        function getContentCount() {
+            let result;
+            $.ajax({url:"/news/toutiao/count",
+                type: "get",
+                async: false,
+                success: function (data) {
+                    result = data;
+                }
+            });
+            return result;
+        }
+
+        function removeHTMLTag(str) {
+            str = str.replace(/(&lt;)+((\/?div)|(\/?p)|(\/?strong)|(\/?img \w+?))(\/?&gt;)+/g,''); //去除HTML tag
+            return str;
+        }
     });
 </script>
 

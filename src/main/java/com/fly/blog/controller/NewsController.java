@@ -58,4 +58,12 @@ public class NewsController {
         return newsService.searchNewsForPage(page, pageSize, example);
     }
 
+    @ApiOperation("获取新闻总数")
+    @GetMapping("/toutiao/count")
+    public Long getCount() {
+        NewsExample example = new NewsExample();
+        example.createCriteria().andSourceEqualTo("toutiao");
+        return newsService.countByExample(example);
+    }
+
 }

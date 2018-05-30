@@ -40,12 +40,17 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public List<News> searchNewsForPage(int page, int pageSize, NewsExample example) {
         PageHelper.startPage(page, pageSize);
-        List<News> news = newsDao.selectByExample(example);
+        List<News> news = newsDao.selectByExampleWithBLOBs(example);
         if (CollectionUtils.isEmpty(news)) {
             return Collections.EMPTY_LIST;
         } else {
             return news;
         }
+    }
+
+    @Override
+    public Long countByExample(NewsExample example) {
+        return newsDao.countByExample(example);
     }
 
 }

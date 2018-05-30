@@ -44,6 +44,7 @@ public class ToutiaoNewsPuller implements NewsPuller {
         } catch (Exception e) {
             logger.error("获取今日头条主页失败！");
             e.printStackTrace();
+            return;
         }
 
         // 2.parse the html to news information and load into POJO
