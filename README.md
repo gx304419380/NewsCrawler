@@ -3,7 +3,7 @@ this is a crowler project built for crawling news from 今日头条 and 网易.
 
 springboot and mybatis are adopted respectively for web layer and persistency layer.
 
-the major utils used by this project is: jsoup, htmlUnit and java regex matcher
+the major utils used by this project are: jsoup, htmlUnit and java regex matcher
 
 the jsoup is perfect for extracting key content from an HTML page, 
 
