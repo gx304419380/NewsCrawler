@@ -33,6 +33,9 @@ public class NewsController {
     @Qualifier("toutiaoNewsPuller")
     private NewsPuller toutiaoNewsPuller;
     @Autowired
+    @Qualifier("sohuNewsPuller")
+    private NewsPuller sohuNewsPuller;
+    @Autowired
     private NewsService newsService;
 
     @ApiOperation(value = "爬虫拉取网易新闻")
@@ -45,6 +48,12 @@ public class NewsController {
     @GetMapping("/pull/toutiao")
     public void pullToutiaoNews() {
         toutiaoNewsPuller.pullNews();
+    }
+
+    @ApiOperation(value = "爬虫拉取搜狐新闻")
+    @GetMapping("/pull/sohu")
+    public void pullSohuNews() {
+        sohuNewsPuller.pullNews();
     }
 
     @ApiOperation(value = "获取{source}新闻")

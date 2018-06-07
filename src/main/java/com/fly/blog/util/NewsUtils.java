@@ -30,6 +30,12 @@ public class NewsUtils {
                 return "今日头条";
             case "neteasy" :
                 return "网易";
+            case "sohu" :
+                return "搜狐";
+            case "ifeng" :
+                return "凤凰";
+            case "sina" :
+                return "新浪";
             default:
                 return null;
         }

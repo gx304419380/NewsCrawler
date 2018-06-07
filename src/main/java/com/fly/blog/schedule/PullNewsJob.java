@@ -19,7 +19,7 @@ public class PullNewsJob {
     @Autowired
     List<NewsPuller> newsPullers;
 
-    @Scheduled(fixedRate = 3600000)
+//    @Scheduled(fixedRate = 3600000)
     public void pullContent() {
         newsPullers.forEach(newsPuller -> System.out.println(newsPuller.getClass()));
         newsPullers.parallelStream().forEach(NewsPuller::pullNews);
