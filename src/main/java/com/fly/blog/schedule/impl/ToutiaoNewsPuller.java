@@ -50,7 +50,7 @@ public class ToutiaoNewsPuller implements NewsPuller {
         // 2.parse the html to news information and load into POJO
         Map<String, News> newsMap = new HashMap<>();
         for (Element a : html.select("a[href~=/group/.*]:not(.comment)")) {
-            logger.debug("标签a: \n{}", a);
+            logger.info("标签a: \n{}", a);
             String href = TOUTIAO_URL + a.attr("href");
             String title = StringUtils.isNotBlank(a.select("p").text()) ?
                     a.select("p").text() : a.text();

@@ -20,69 +20,69 @@ import java.util.HashSet;
  * @author XXX
  * @since 2018-06-07
  */
-@Component("sohuNewsPuller")
-public class SohuNewsPuller implements NewsPuller {
+@Component("ifengNewsPuller")
+public class IfengNewsPuller implements NewsPuller {
 
-    private static final Logger logger = LoggerFactory.getLogger(SohuNewsPuller.class);
-    @Value("${news.sohu.url}")
+    private static final Logger logger = LoggerFactory.getLogger(IfengNewsPuller.class);
+    @Value("${news.ifeng.url}")
     private String url;
     @Autowired
     private NewsService newsService;
 
     @Override
     public void pullNews() {
-        logger.info("开始拉取搜狐新闻！");
+        logger.info("开始拉取凤凰新闻！");
         // 1.获取首页
         Document html= null;
         try {
             html = getHtmlFromUrl(url, false);
         } catch (Exception e) {
-            logger.error("==============获取搜狐首页失败: {}=============", url);
+            logger.error("==============获取凤凰首页失败: {} =============", url);
             e.printStackTrace();
             return;
         }
         // 2.jsoup获取新闻<a>标签
-        Elements newsATags = html.select("div.focus-news")
-                .select("div.list16")
+        Elements newsATags = html.select("div#headLineDefault")
+                .select("ul.FNewMTopLis")
                 .select("li")
                 .select("a");
-
 
         // 3.从<a>标签中抽取基本信息，封装成news
         HashSet<News> newsSet = new HashSet<>();
         for (Element a : newsATags) {
             String url = a.attr("href");
-            String title = a.attr("title");
+            String title = a.text();
             News n = new News();
-            n.setSource("搜狐");
+            n.setSource("凤凰");
             n.setUrl(url);
             n.setTitle(title);
             n.setCreateDate(new Date());
             newsSet.add(n);
         }
         // 4.根据新闻url访问新闻，获取新闻内容
-        newsSet.forEach(news -> {
-            logger.info("开始抽取搜狐新闻内容：{}", news.getUrl());
+        newsSet.parallelStream().forEach(news -> {
+            logger.info("开始抽取凤凰新闻《{}》内容：{}", news.getTitle(), news.getUrl());
             Document newsHtml = null;
             try {
                 newsHtml = getHtmlFromUrl(news.getUrl(), false);
-                Element newsContent = newsHtml.select("div#article-container")
-                        .select("div.main")
-                        .select("div.text")
-                        .first();
-                String title = newsContent.select("div.text-title").select("h1").text();
-                String content = newsContent.select("article.article").first().toString();
+                Elements contentElement = newsHtml.select("div#main_content");
+                if (contentElement.isEmpty()) {
+                    contentElement = newsHtml.select("div#yc_con_txt");
+                }
+                if (contentElement.isEmpty())
+                    return;
+                String content = contentElement.toString();
                 String image = NewsUtils.getImageFromContent(content);
-
-                news.setTitle(title);
                 news.setContent(content);
                 news.setImage(image);
                 newsService.saveNews(news);
-                logger.info("抽取搜狐新闻《{}》成功！", news.getTitle());
+                logger.info("抽取凤凰新闻《{}》成功！", news.getTitle());
             } catch (Exception e) {
-                logger.error("新闻抽取失败:{}", news.getUrl());
+                logger.error("凤凰新闻抽取失败:{}", news.getUrl());
                 e.printStackTrace();
             }
         });
+
+        logger.info("凤凰新闻抽取完成！");
     }
 }

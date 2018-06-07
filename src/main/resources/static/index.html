@@ -81,15 +81,16 @@
             $.each(data, function (i, news) {
                 $("#carousel2").append(
 //                    "<div align=\"center\"><img src='" + news.largeImage + "' height=\"100%\"></div>"
-                    "<div align=\"center\"  " +
+                    "<div onclick=\"window.open('"+news.url+"');\" align=\"center\"  " +
                     "style=\"background:url('"+news.largeImage+"');" +
                     "background-position:center;" +
                     "background-size: auto 100%;" +
                     "text-align: center;" +
+                    "cursor:pointer; " +
                     "background-repeat:no-repeat;\">"
-                    +"<a href='"+news.url+"'><span style=\"font-size: large; color: white; \">"
+                    +"<span style=\"font-size: large; color: white; \">"
                     + news.title.substr(0, 20) + "..."
-                    + "</span></a>"
+                    + "</span>"
                     +"</div>"
                 );
             });
@@ -130,6 +131,7 @@
             });
             return result;
         }
+
     });
 </script>
 

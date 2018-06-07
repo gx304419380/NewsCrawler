@@ -74,6 +74,7 @@ public class NetEasyNewsPuller implements NewsPuller {
                 news.setContent(newsContent.toString());
                 news.setImage(image);
                 newsService.saveNews(news);
+                logger.info("抽取网易新闻《{}》成功！", news.getTitle());
             } catch (Exception e) {
                 logger.error("新闻抽取失败:{}", news.getUrl());
                 e.printStackTrace();
