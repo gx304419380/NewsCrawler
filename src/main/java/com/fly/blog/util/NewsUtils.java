@@ -9,6 +9,31 @@ import java.util.regex.Pattern;
  */
 public class NewsUtils {
 
+    public static String getTextFromContent(String content) {
+        String scriptRegex = "<script[^>]*?>[\\s\\S]*?<\\/script>"; // script
+        String styleRegex = "<style[^>]*?>[\\s\\S]*?<\\/style>"; // style
+        String htmlTagRegex = "<[^>]+>"; // HTML tag
+        String spaceRegex = "\\s+|\t|\r|\n";// other characters
+
+        Pattern scriptPattern = Pattern.compile(scriptRegex, Pattern.CASE_INSENSITIVE);
+        Matcher scriptMatcher = scriptPattern.matcher(content);
+        content = scriptMatcher.replaceAll("");
+
+        Pattern stylePattern = Pattern.compile(styleRegex, Pattern.CASE_INSENSITIVE);
+        Matcher styleMatcher = stylePattern.matcher(content);
+        content = styleMatcher.replaceAll("");
+
+        Pattern htmlTagPattern = Pattern.compile(htmlTagRegex, Pattern.CASE_INSENSITIVE);
+        Matcher htmlTagMatcher = htmlTagPattern.matcher(content);
+        content = htmlTagMatcher.replaceAll("");
+
+        Pattern spacePattern = Pattern.compile(spaceRegex, Pattern.CASE_INSENSITIVE);
+        Matcher spaceMatcher = spacePattern.matcher(content);
+        content = spaceMatcher.replaceAll(" ");
+
+        return content;
+    }
+
     public static String getImageFromContent(String content) {
         String image = null;
         String imgRegex = "(<img.*src\\s*=\\s*(.*?)[^>]*?>)";

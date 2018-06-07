@@ -46,4 +46,15 @@ public class BlogApplicationTests {
         });
     }
 
+    @Test
+    public void replaceImage() throws ClassNotFoundException {
+        NewsExample newsExample = new NewsExample();
+        newsExample.createCriteria().andImageEqualTo("/img/6.jpg");
+        List<News> newsList = newsDao.selectByExample(newsExample);
+        newsList.forEach(news -> {
+            news.setImage(null);
+            newsDao.updateByPrimaryKey(news);
+        });
+    }
+
 }

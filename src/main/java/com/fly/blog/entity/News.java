@@ -49,7 +49,7 @@ public class News {
     }
 
     public String getImage() {
-        return StringUtils.isNotBlank(image) ? image : "/img/6.jpg";
+        return StringUtils.isNotBlank(image) ? image : "/img/news.png";
     }
 
     public void setImage(String image) {
@@ -90,8 +90,7 @@ public class News {
 
     public String getSummary() {
         // 去除网页中的所有标签，然后取出140个字符
-        String summary = content.replaceAll("</?[^>]+>", "")
-                .replaceAll("\\s*|\t|\r|\n", "");
+        String summary = NewsUtils.getTextFromContent(content);
         // 值得注意，如果新闻太短，小于140个字符，则有多少截取多少！！！
         summary = summary.substring(0, summary.length() > 140 ? 140 : summary.length()) + "...";
         return summary;

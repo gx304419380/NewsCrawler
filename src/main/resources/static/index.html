@@ -80,7 +80,6 @@
         $.get("/news", {page : 1, pageSize : 5}, function (data) {
             $.each(data, function (i, news) {
                 $("#carousel2").append(
-//                    "<div align=\"center\"><img src='" + news.largeImage + "' height=\"100%\"></div>"
                     "<div onclick=\"window.open('"+news.url+"');\" align=\"center\"  " +
                     "style=\"background:url('"+news.largeImage+"');" +
                     "background-position:center;" +
