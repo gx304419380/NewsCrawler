@@ -59,7 +59,7 @@ public class ToutiaoNewsPuller implements NewsPuller {
             News news = newsMap.get(href);
             if (news == null) {
                 News n = new News();
-                n.setSource("toutiao");
+                n.setSource("今日头条");
                 n.setUrl(href);
                 n.setCreateDate(new Date());
                 n.setImage(image);
@@ -91,16 +91,21 @@ public class ToutiaoNewsPuller implements NewsPuller {
                 Pattern pattern = Pattern.compile(regex);
                 Matcher matcher = pattern.matcher(script.toString());
                 if (matcher.find()) {
-                    logger.info("content: {}", matcher.group(1));
-                    news.setContent(matcher.group(1));
+                    String content = matcher.group(1)
+                            .replace("&lt;", "<")
+                            .replace("&gt;", ">")
+                            .replace("&quot;", "\"")
+                            .replace("&#x3D;", "=");
+                    logger.info("content: {}", content);
+                    news.setContent(content);
                 }
             });
         });
-        logger.info("新闻内容拉取完成!");
         newsMap.values()
                 .stream()
                 .filter(news -> StringUtils.isNotBlank(news.getContent()) && !news.getContent().equals("null"))
                 .forEach(newsService::saveNews);
+        logger.info("今日头条新闻内容拉取完成!");
 
     }
 }

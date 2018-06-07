@@ -2,18 +2,18 @@ package com.fly.blog.schedule.impl;
 
 import com.fly.blog.entity.News;
 import com.fly.blog.schedule.NewsPuller;
+import com.fly.blog.service.NewsService;
+import com.fly.blog.util.NewsUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
 /**
  * @author XXX
@@ -25,10 +25,12 @@ public class NetEasyNewsPuller implements NewsPuller {
     private static final Logger logger = LoggerFactory.getLogger(NetEasyNewsPuller.class);
     @Value("${news.neteasy.url}")
     private String url;
-
+    @Autowired
+    private NewsService newsService;
     @Override
     public void pullNews() {
-
+        logger.info("开始拉取网易热门新闻！");
+        // 1.获取首页
         Document html= null;
         try {
             html = getHtmlFromUrl(url, false);
@@ -37,23 +39,26 @@ public class NetEasyNewsPuller implements NewsPuller {
             e.printStackTrace();
             return;
         }
+        // 2.jsoup获取指定标签
         Elements newsA = html.select("div#whole")
                 .next("div.area-half.left")
                 .select("div.tabContents")
                 .first()
                 .select("tbody > tr")
                 .select("a[href~=^http://news.163.com.*]");
-        HashSet<News> newsSet = new HashSet<>();
 
+        // 3.从标签中抽取信息，封装成news
+        HashSet<News> newsSet = new HashSet<>();
         newsA.forEach(a -> {
             String url = a.attr("href");
             News n = new News();
-            n.setSource("neteasy");
+            n.setSource("网易");
             n.setUrl(url);
             n.setCreateDate(new Date());
             newsSet.add(n);
         });
 
+        // 4.根据url访问新闻，获取新闻内容
         newsSet.forEach(news -> {
             logger.info("开始抽取新闻内容：{}", news.getUrl());
             Document newsHtml = null;
@@ -63,17 +68,18 @@ public class NetEasyNewsPuller implements NewsPuller {
                 Elements titleP = newsContent.select("p.otitle");
                 String title = titleP.text();
                 title = title.substring(5, title.length() - 1);
+                String image = NewsUtils.getImageFromContent(newsContent.toString());
+
                 news.setTitle(title);
-
-                System.out.println(title);
-                System.out.println(newsContent);
-
+                news.setContent(newsContent.toString());
+                news.setImage(image);
+                newsService.saveNews(news);
             } catch (Exception e) {
                 logger.error("新闻抽取失败:{}", news.getUrl());
                 e.printStackTrace();
             }
         });
-
+        logger.info("网易新闻拉取完成！");
 
 
     }

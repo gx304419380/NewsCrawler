@@ -4,16 +4,14 @@ import com.fly.blog.entity.News;
 import com.fly.blog.entity.NewsExample;
 import com.fly.blog.schedule.NewsPuller;
 import com.fly.blog.service.NewsService;
+import com.fly.blog.util.NewsUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -49,20 +47,37 @@ public class NewsController {
         toutiaoNewsPuller.pullNews();
     }
 
-    @ApiOperation(value = "获取今日头条新闻")
-    @GetMapping("/toutiao")
-    public List<News> getToutiaoNews(@RequestParam Integer page, @RequestParam Integer pageSize) {
+    @ApiOperation(value = "获取{source}新闻")
+    @GetMapping("/{source}")
+    public List<News> getToutiaoNews(@RequestParam Integer page, @RequestParam Integer pageSize, @PathVariable String source) {
         NewsExample example = new NewsExample();
-        example.createCriteria().andSourceEqualTo("toutiao");
+        example.createCriteria().andSourceEqualTo(NewsUtils.getSourceFromPathVariable(source));
+        example.setOrderByClause("create_date desc");
+        return newsService.searchNewsForPage(page, pageSize, example);
+    }
+
+    @ApiOperation("获取{source}新闻总数")
+    @GetMapping("/{source}/count")
+    public Long getToutiaoCount(@PathVariable String source) {
+        NewsExample example = new NewsExample();
+        example.createCriteria().andSourceEqualTo(NewsUtils.getSourceFromPathVariable(source));
+        return newsService.countByExample(example);
+    }
+
+    @ApiOperation(value = "获取所有新闻")
+    @GetMapping
+    public List<News> getNews(@RequestParam Integer page, @RequestParam Integer pageSize) {
+        NewsExample example = new NewsExample();
+        example.createCriteria();
         example.setOrderByClause("create_date desc");
         return newsService.searchNewsForPage(page, pageSize, example);
     }
 
     @ApiOperation("获取新闻总数")
-    @GetMapping("/toutiao/count")
+    @GetMapping("/count")
     public Long getCount() {
         NewsExample example = new NewsExample();
-        example.createCriteria().andSourceEqualTo("toutiao");
+        example.createCriteria();
         return newsService.countByExample(example);
     }
 

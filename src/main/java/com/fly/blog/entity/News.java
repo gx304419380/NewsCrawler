@@ -1,6 +1,11 @@
 package com.fly.blog.entity;
 
+import com.fly.blog.util.NewsUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class News {
     private Integer id;
@@ -44,7 +49,7 @@ public class News {
     }
 
     public String getImage() {
-        return image;
+        return StringUtils.isNotBlank(image) ? image : "/img/6.jpg";
     }
 
     public void setImage(String image) {
@@ -81,6 +86,20 @@ public class News {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getSummary() {
+        // 去除网页中的所有标签，然后取出140个字符
+        String summary = content.replaceAll("</?[^>]+>", "")
+                .replaceAll("\\s*|\t|\r|\n", "");
+        // 值得注意，如果新闻太短，小于140个字符，则有多少截取多少！！！
+        summary = summary.substring(0, summary.length() > 140 ? 140 : summary.length()) + "...";
+        return summary;
+    }
+
+    public String getLargeImage() {
+        String largeImage = NewsUtils.getImageFromContent(content);
+        return StringUtils.isNotBlank(largeImage) ? largeImage : image;
     }
 
     @Override

@@ -32,11 +32,17 @@ public interface NewsPuller {
             webClient.getOptions().setThrowExceptionOnScriptError(false);
             webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
             webClient.getOptions().setTimeout(10000);
-            HtmlPage rootPage = webClient.getPage(url);
-            webClient.waitForBackgroundJavaScript(10000);
-            String htmlString = rootPage.asXml();
-            webClient.close();
-            return Jsoup.parse(htmlString);
+            HtmlPage rootPage = null;
+            try {
+                rootPage = webClient.getPage(url);
+                webClient.waitForBackgroundJavaScript(10000);
+                String htmlString = rootPage.asXml();
+                return Jsoup.parse(htmlString);
+            } catch (Exception e) {
+                throw e;
+            } finally {
+                webClient.close();
+            }
         }
     }
 

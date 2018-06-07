@@ -10,12 +10,12 @@
 <body>
 <header>
     <ul class="layui-nav layui-bg-black" lay-filter="">
-        <li class="layui-nav-item layui-this"><a href="">首页</a></li>
-        <li class="layui-nav-item"><a href="./toutiao.html">新闻头条</a></li>
-        <li class="layui-nav-item"><a href="./neteasy.html">网易新闻</a></li>
-        <li class="layui-nav-item"><a href="./sohu.html">搜狐新闻</a></li>
-        <li class="layui-nav-item"><a href="./ifeng.html">凤凰新闻</a></li>
-        <li class="layui-nav-item"><a href="./sina.html">新浪微博</a></li>
+        <li class="layui-nav-item"><a href="/">首页</a></li>
+        <li class="layui-nav-item"><a href="/toutiao.html">新闻头条</a></li>
+        <li class="layui-nav-item"><a href="/neteasy.html">网易新闻</a></li>
+        <li class="layui-nav-item layui-this"><a href="/sohu.html">搜狐新闻</a></li>
+        <li class="layui-nav-item"><a href="/ifeng.html">凤凰新闻</a></li>
+        <li class="layui-nav-item"><a href="/sina.html">新浪微博</a></li>
         <li class="layui-nav-item">
             <a href="javascript:;">其他</a>
             <dl class="layui-nav-child"> <!-- 二级菜单 -->
@@ -30,7 +30,7 @@
     <hr>
     <div>
         <span class="layui-breadcrumb">
-            <a href="">首页</a>
+            <a href="">搜狐新闻</a>
             <a><cite>正文</cite></a>
         </span>
     </div>
@@ -77,7 +77,7 @@
             }
         });
 
-        $.get("/news", {page : 1, pageSize : 5}, function (data) {
+        $.get("/news/sohu", {page : 1, pageSize : 5}, function (data) {
             $.each(data, function (i, news) {
                 $("#carousel2").append(
 //                    "<div align=\"center\"><img src='" + news.largeImage + "' height=\"100%\"></div>"
@@ -97,7 +97,7 @@
         }, "json");
 
         function getContent(page, pageSize) {
-            $.get("/news", {'page' : page, 'pageSize' : pageSize}, function (data) {
+            $.get("/news/sohu", {'page' : page, 'pageSize' : pageSize}, function (data) {
                 $("#contentArea").empty();
                 $.each(data, function (i, news) {
                     $("#contentArea").append(
@@ -121,7 +121,7 @@
 
         function getContentCount() {
             let result;
-            $.ajax({url:"/news/count",
+            $.ajax({url:"/news/sohu/count",
                 type: "get",
                 async: false,
                 success: function (data) {
