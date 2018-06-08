@@ -1,5 +1,5 @@
 # NewsCrawler
-this is a crowler project built for crawling news from 今日头条 and 网易.
+this is a crowler project built for crawling news from 今日头条, 网易, 凤凰新闻, 搜狐新闻 and 新浪.
 
 springboot and mybatis are adopted respectively for web layer and persistency layer.
 
